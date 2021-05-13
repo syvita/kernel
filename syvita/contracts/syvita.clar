@@ -47,12 +47,16 @@
     ) 
     (begin 
         (fold if ))
-        ;; use fold to iterate through list, get to get the address property from the tuple 
-        ;; and pubkey-to-address to convert pubkeys to addresses. make sure addresses are equal
-        ;; to those given in signatures. then use secp256k1-verify to verify each signature of the
-        ;; uniqueUpdateId hash matches. if all go ok, then it is added to be voted on. with a majority
-        ;; vote, the contract will test that essential functions work on the new contract and then
-        ;; update the toplevel data-vars to show the new version of the DAO. 
+        ;; use fold to iterate through list, get to retrieve the pubkey property from the tuple 
+        ;; and principal-of? to convert pubkeys to addresses. make sure addresses are equal
+        ;; to those given in signature tuples. 
+
+        ;; verify that each address is a member of syvita by checking for ownership of syvita ft
+        ;; then use secp256k1-verify to verify each signature of the uniqueUpdateId hash matches.
+        
+        ;; if all go ok, then it is added to be voted on. with a majority vote, the contract 
+        ;; will test that essential functions work on the new contract and then update the toplevel
+        ;; data-vars to show the new version of the DAO. 
     )
 
 ;; RBAC engine
