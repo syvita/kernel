@@ -37,22 +37,15 @@
         (title (string-utf8 u32))
         (newContract principle)
         (update-uri (string-utf8 u64))
-        (signatures (list MAX_UPDATE_SIGNATURES
-            (tuple
-                (signature ((buff 64) | (buff 65)))
-                (publicKey (buff 33))
-                (address principle)
-            )
-        ))
+        (signatures (list MAX_UPDATE_SIGNATURES (signature ((buff 64) | (buff 65)))))
+        )
     ) 
     (begin 
         (fold if ))
-        ;; use fold to iterate through list, get to retrieve the pubkey property from the tuple 
-        ;; and principal-of? to convert pubkeys to addresses. make sure addresses are equal
-        ;; to those given in signature tuples. 
-
-        ;; verify that each address is a member of syvita by checking for ownership of syvita ft
-        ;; then use secp256k1-verify to verify each signature of the uniqueUpdateId hash matches.
+        ;; use fold to iterate through list, unwrap each signature, use secp256k1-recover? to get
+        ;; pubkey from signature and principal-of? to convert said pubkeys to addresses. 
+        ;; then verify that each address is a member of syvita by checking for ownership of syvita ft
+        ;; and use secp256k1-verify to verify each signature of the uniqueUpdateId hash matches.
         
         ;; if all go ok, then it is added to be voted on. with a majority vote, the contract 
         ;; will test that essential functions work on the new contract and then update the toplevel
