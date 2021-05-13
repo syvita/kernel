@@ -39,7 +39,7 @@
         (update-uri (string-utf8 u64))
         (signatures (list MAX_UPDATE_SIGNATURES (signature ((buff 64) | (buff 65)))))
         )
-    ) 
+        
     (begin 
         (fold if ))
         ;; use fold to iterate through list, unwrap each signature, use secp256k1-recover? to get
@@ -50,7 +50,6 @@
         ;; if all go ok, then it is added to be voted on. with a majority vote, the contract 
         ;; will test that essential functions work on the new contract and then update the toplevel
         ;; data-vars to show the new version of the DAO. 
-    )
 
 ;; RBAC engine
 
