@@ -33,13 +33,13 @@
 (define-private (pubkey-to-address (address principle)))
 
 (define-public (create-update-proposal 
-        (uniqueUpdateId (string-utf8 u32))
-        (title (string-utf8 u32))
-        (newContract principle)
-        (update-uri (string-utf8 u64))
-        (signatures (list MAX_UPDATE_SIGNATURES (signature ((buff 64) | (buff 65)))))
+        (uniqueUpdateId (string-utf8 u32)) ;; a unique id for the proposal, a bit like a branch name (eg `syvita-update-1`)
+        (title (string-utf8 u32)) ;; selfexplanatory. title of the proposal. doesn't have to be unique
+        (newContract principle) ;; the next DAO kernel's contract identifier. current contract will test the new one automatically
+        (update-uri (string-utf8 u64)) ;; uri for additional proposal data offchain like description, thumbnail whatever
+        (signatures (list MAX_UPDATE_SIGNATURES (signature ((buff 64) | (buff 65))))) ;; a list of secp256k1 signatures of the hashed (SHA256) uniqueUpdateId
         )
-        
+
     (begin 
         (fold if ))
         ;; use fold to iterate through list, unwrap each signature, use secp256k1-recover? to get
@@ -49,7 +49,11 @@
         
         ;; if all go ok, then it is added to be voted on. with a majority vote, the contract 
         ;; will test that essential functions work on the new contract and then update the toplevel
-        ;; data-vars to show the new version of the DAO. 
+        ;; data-vars to show the new version of the DAO.
+
+        ;; frontends/clients will use is-latest-version & get-latest-version to rapidly check and get
+        ;; the latest version of the DAO. this should be embedded in the protocol and supported by all
+        ;; clients that interact with the DAO
 
 ;; RBAC engine
 
