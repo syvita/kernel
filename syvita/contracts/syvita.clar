@@ -30,18 +30,29 @@
     )
 )
 
-(define-private (pubkey-to-address (address principle)))
+(define-private (sig-to-address (sig (buff 65)) (msgHash (buff 32)))
+   (principal-of? (unwrap-panic (secp256k1-recover? msgHash sig)))
+)
+
+(define-private (verify-signature))
 
 (define-public (create-update-proposal 
         (uniqueUpdateId (string-utf8 u32)) ;; a unique id for the proposal, a bit like a branch name (eg `syvita-update-1`)
         (title (string-utf8 u32)) ;; selfexplanatory. title of the proposal. doesn't have to be unique
         (newContract principle) ;; the next DAO kernel's contract identifier. current contract will test the new one automatically
         (update-uri (string-utf8 u64)) ;; uri for additional proposal data offchain like description, thumbnail whatever
-        (signatures (list MAX_UPDATE_SIGNATURES (signature ((buff 64) | (buff 65))))) ;; a list of secp256k1 signatures of the hashed (SHA256) uniqueUpdateId
-        )
+        (signatures (list MAX_UPDATE_SIGNATURES ;; a list of secp256k1 signatures of the hashed (SHA256) uniqueUpdateId
+            ({ 
+                signature: ((buff 64) | (buff 65)), 
+                msgHash: (buff 32) 
+            }) 
+        ))) 
+    )
 
-    (begin 
-        (fold if ))
+    (begin
+        (if (unwrap-panic (fold verify-signature signatures (ok true))))
+        
+    )
         ;; use fold to iterate through list, unwrap each signature, use secp256k1-recover? to get
         ;; pubkey from signature and principal-of? to convert said pubkeys to addresses. 
         ;; then verify that each address is a member of syvita by checking for ownership of syvita ft
